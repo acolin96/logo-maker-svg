@@ -48,5 +48,36 @@ return writeSVGToFile(svgLogo);
     console.error('an error occured:', error);
 });
 
+const generateSVGlogo = (text, color,  shape, shapeColor) => {
+    
+    return `
+    <svg width="300" height="200">
+      <style>
+        text {
+          fill: ${color};
+          text-anchor: middle;
+        }
+        ${shape} {
+          fill: ${shapeColor};
+        }
+      </style>
+      <text x="150" y="100">${text}</text>
+      <${shape} cx="150" cy="150" r="50" />
+    </svg>
+  `;
+};
+
+const writeSVGToFile = (content) => {
+    return new Promise((resolve, reject) => {
+      fs.writeFile('logo.svg', content, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  };
+
 
 

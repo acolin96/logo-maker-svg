@@ -1,0 +1,15 @@
+
+    <svg width="300" height="200">
+      <style>
+        text {
+          fill: white;
+          text-anchor: middle;
+        }
+        triangle {
+          fill: green;
+        }
+      </style>
+      <text x="150" y="100">svg</text>
+      <triangle cx="150" cy="150" r="50" />
+    </svg>
+  
