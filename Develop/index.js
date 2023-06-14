@@ -33,3 +33,20 @@ const inquirer = require('inquirer');
 
 
 ])
+
+.then((answers) => {
+const { text, color, shape, shapeColor } = answers;
+const svgLogo = generateSVGlogo(text, color, shape, shapeColor);
+return writeSVGToFile(svgLogo);
+
+})
+
+.then(() => {
+    console.log('Generated logo.svg');
+})
+.catch((error) => {
+    console.error('an error occured:', error);
+});
+
+
+
