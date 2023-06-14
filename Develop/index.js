@@ -4,7 +4,8 @@ const inquirer = require('inquirer');
 
 // Function to prompt for 3 character input
  inquirer
-  .prompt({
+  .prompt([
+    {
     name: 'text',
     message: 'Enter up to three characters:',
     validate: function (input) {
@@ -14,4 +15,12 @@ const inquirer = require('inquirer');
       return 'Please enter up to three characters.';
     },
 
-});
+},
+{
+    name: 'color',
+    message: 'Enter a color keyword or hexadecimal number:',   
+},
+
+
+
+])
