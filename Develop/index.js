@@ -18,9 +18,18 @@ const inquirer = require('inquirer');
 },
 {
     name: 'color',
-    message: 'Enter a color keyword or hexadecimal number:',   
+    message: 'Enter a color or hexadecimal number:',   
 },
-
+{
+    name: 'shape',
+    type: 'list',
+    message: 'Please choose a shape:',
+    choices: ['circle', 'triangle', 'square']
+},
+{
+    name: 'shapeColor',
+    message: 'Enter a color or hexadecimal number '
+},
 
 
 ])
