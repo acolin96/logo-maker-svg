@@ -1,83 +1,90 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
+const { Square, Triangle, Circle } = require('./lib/shapes');
+const SVG = require('./lib/svg');
 
 
 // Function to prompt for 3 character input
- inquirer
+inquirer
   .prompt([
     {
-    name: 'text',
-    message: 'Enter up to three characters:',
-    validate: function (input) {
-      if (input.length <= 3) {
-        return true;
-      }
-      return 'Please enter up to three characters.';
+      type: 'input',
+      name: 'text',
+      message: 'Enter up to three characters:',
+      validate: function (input) {
+        if (input.length <= 3) {
+          return true;
+        }
+        return 'Please enter up to three characters.';
+      },
+
+    },
+    {
+      type: 'input',
+      name: 'color',
+      message: 'Enter a color or hexadecimal number:',
+    },
+    {
+      name: 'shape',
+      type: 'list',
+      message: 'Please choose a shape:',
+      choices: ['Circle', 'Triangle', 'Square']
+    },
+    {
+      type: 'input',
+      name: 'shapeColor',
+      message: 'Enter a color or hexadecimal number '
     },
 
-},
-{
-    name: 'color',
-    message: 'Enter a color or hexadecimal number:',   
-},
-{
-    name: 'shape',
-    type: 'list',
-    message: 'Please choose a shape:',
-    choices: ['circle', 'triangle', 'square']
-},
-{
-    name: 'shapeColor',
-    message: 'Enter a color or hexadecimal number '
-},
+
+  ])
+
+  .then(({ text, color, shape, shapeColor }) => {
+    const shapeContent = generateShapes(text, color, shape, shapeColor)
+    return shapeContent
+    // console.log('Generated logo.svg');
+  })
+
+  .then((shapeContent) => {
+    fs.writeFile('logo.svg', shapeContent, (error) => error ? console.log('Error occured!', error) : console.log('SVG logo created!'))
+
+  })
 
 
-])
 
-.then((answers) => {
-const { text, color, shape, shapeColor } = answers;
-const svgLogo = generateSVGlogo(text, color, shape, shapeColor);
-return writeSVGToFile(svgLogo);
 
-})
 
-.then(() => {
-    console.log('Generated logo.svg');
-})
-.catch((error) => {
-    console.error('an error occured:', error);
-});
+  // .catch((error) => {
+  //   console.error('an error occured:', error);
+  // });
 
-const generateSVGlogo = (text, color,  shape, shapeColor) => {
-    
-    return `
-    <svg width="300" height="200">
-      <style>
-        text {
-          fill: ${color};
-          text-anchor: middle;
-        }
-        ${shape} {
-          fill: ${shapeColor};
-        }
-      </style>
-      <text x="150" y="100">${text}</text>
-      <${shape} cx="150" cy="150" r="50" />
-    </svg>
-  `;
+function generateShapes(text, color, shape, shapeColor) {
+  var shapeInput;
+  if (shape === 'Circle') {
+    shapeInput = new Circle();
+  } else if (shape === 'Triangle') {
+    shapeInput = new Triangle();
+  } else if (shape === 'Square') {
+    shapeInput = new Square();
+  } else {
+    // alert("Please choose a valid option");
+    return 0
+  }
+
+  shapeInput.setColor(shapeColor)
+  return generateSVGlogo(text, color, shapeInput)
 };
 
-const writeSVGToFile = (content) => {
-    return new Promise((resolve, reject) => {
-      fs.writeFile('logo.svg', content, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-  };
+// this should hopefully generate the logo
+function generateSVGlogo(text, color, shapeInput,) {
+  let logo = new SVG()
+  logo.setText(text, color)
+  logo.setShape(shapeInput)
+
+
+
+  return logo.render()
+};
 
 
 
